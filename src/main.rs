@@ -1,4 +1,6 @@
+mod auth;
 mod router;
+mod shared;
 mod users;
 
 use sqlx::postgres::PgPoolOptions;

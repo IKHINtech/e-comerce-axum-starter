@@ -1,3 +1,14 @@
+use std::time::{SystemTime, UNIX_EPOCH};
+
+use argon2::{
+    Argon2, PasswordHash, PasswordVerifier,
+    password_hash::{PasswordHasher, SaltString},
+};
+use jsonwebtoken::{EncodingKey, Header, encode};
+use rand::rngs::OsRng;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
     pub sub: String,
     pub role: String,
@@ -17,7 +28,7 @@ pub fn hash_password(password: &str) -> Result<String, String> {
 pub fn verify_password(password: &str, hash: &str) -> bool {
     let parsed_hash = match PasswordHash::new(hash) {
         Ok(hash) => hash,
-        Err(e) => return false,
+        Err(_e) => return false,
     };
     Argon2::default()
         .verify_password(password.as_bytes(), &parsed_hash)
@@ -41,5 +52,5 @@ pub fn create_jwt(user_id: String, role: String) -> Result<String, String> {
         &claims,
         &EncodingKey::from_secret(secret.as_bytes()),
     )
-    .map_err(|e| e.to_string())?;
+    .map_err(|e| e.to_string())
 }
