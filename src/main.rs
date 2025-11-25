@@ -1,4 +1,5 @@
 mod auth;
+mod products;
 mod router;
 mod shared;
 mod users;
