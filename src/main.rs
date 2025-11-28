@@ -1,4 +1,5 @@
 mod auth;
+mod cart;
 mod products;
 mod router;
 mod shared;
